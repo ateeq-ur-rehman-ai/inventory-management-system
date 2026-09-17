@@ -1,0 +1,11 @@
+{
+  "name": "inventory-management-system",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "electron": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
