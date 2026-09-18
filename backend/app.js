@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require('path');
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 
-// Database connection import (taake file run hote hi connection check ho jaye)
-require('./src/config/database');
+// Database connection import (pool)
+const pool = require('./src/config/database');
 
 const app = express();
 
@@ -11,6 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.send('Inventory Management System Backend is Active!');
+});
 // Health Check Route
 app.get('/api/health', (req, res) => {
     res.status(200).json({ 
@@ -19,17 +23,13 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Basic Error Handling Middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ status: 'error', message: 'Something went wrong on the server!' });
-});
-
-// Routes import
+// Routes Import
+const authRoutes = require('./src/routes/auth'); 
 const productRoutes = require('./src/routes/productRoutes');
 
-// Middleware ke baad yeh add karo
-app.use('/api/products', productRoutes);
+// Mount Routes
+app.use('/api', authRoutes);          // Yeh /api/login route ko active karega
+app.use('/api/products', productRoutes); // Yeh /api/products routes ko active karega
 
 // 1. Add Inventory Batch (FEFO tracking ke liye)
 app.post('/api/batches', async (req, res) => {
@@ -61,6 +61,10 @@ app.get('/api/batches/:product_id', async (req, res) => {
     }
 });
 
-
+// Basic Error Handling Middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ status: 'error', message: 'Something went wrong on the server!' });
+});
 
 module.exports = app;
