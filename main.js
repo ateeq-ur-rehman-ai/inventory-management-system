@@ -6,13 +6,17 @@ function createWindow() {
         width: 1200,
         height: 800,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+        nodeIntegration: false,
+        contextIsolation: true
         }
     });
 
-    // Yeh Vite ke dev server ka URL load karega
-    win.loadURL('http://localhost:5173');
+    const developmentUrl = process.env.ELECTRON_START_URL;
+    if (developmentUrl) {
+        win.loadURL(developmentUrl);
+    } else {
+        win.loadFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+    }
 }
 
 app.whenReady().then(() => {

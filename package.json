@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "electron": "electron ."
+    "electron": "electron .",
+    "build:frontend": "npm --prefix frontend run build",
+    "electron:dev": "set ELECTRON_START_URL=http://localhost:5173&& electron ."
   },
   "devDependencies": {
     "electron": "^31.0.0"

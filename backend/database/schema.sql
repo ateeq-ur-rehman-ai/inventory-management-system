@@ -54,3 +54,5 @@ CREATE TABLE IF NOT EXISTS transactions (
     description TEXT,
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE invoice_itemsMODIFY COLUMN batch_id INT NULL;
